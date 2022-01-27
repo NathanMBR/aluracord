@@ -1,0 +1,9 @@
+{
+  "name": "aluracord",
+  "version": "1.0.0",
+  "description": "This is the AluraCord project done at the \"Imersão React by Alura\" brazilian event.",
+  "main": "index.js",
+  "repository": "https://github.com/NathanMBR/aluracord.git",
+  "author": "Nathan Murillo <nathanmurillodeoliveira@gmail.com>",
+  "license": "MIT"
+}
