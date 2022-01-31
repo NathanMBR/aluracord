@@ -4,4 +4,6 @@ build/
 
 *.log
 *.env
+.env.*
+*.env.*
 !.example.env
