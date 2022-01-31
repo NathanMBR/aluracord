@@ -58,7 +58,7 @@ export default () => {
 			  }}
 			  onSubmit={event => {
 				event.preventDefault()
-				router.push("/chat")
+				router.push(`/chat?user=${user}`)
 			  }}
 			>
 			  <Title tag="h2">Welcome!</Title>
