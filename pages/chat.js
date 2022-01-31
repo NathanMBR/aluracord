@@ -1,19 +1,24 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../configs.json';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+const client = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 export default () => {
 	const [message, setMessage] = React.useState("")
-	const [messagesList, setMessagesList] = React.useState([
-		{
-			id: 0,
-			user: "Test",
-			text: "Hello, world!"
-		}
-	])
+	const [messagesList, setMessagesList] = React.useState([])
+	React.useEffect(() => {
+		client
+			.from("messages")
+			.select("*")
+			.then(({ data }) => setMessagesList(data))
+			.catch(console.error)
+	}, [])
 
-	const handleNewMessage = newMessageText => ({
-		id: messagesList.length,
+	const generateNewMessage = newMessageText => ({
 		user: "WIP",
 		text: newMessageText
 	})
@@ -68,13 +73,19 @@ export default () => {
 							type="textarea"
 							value={message}
 							onChange={({ target: { value }}) => { setMessage(value) }}
-							onKeyPress={event => {
+							onKeyPress={async event => {
 								if (event.key === "Enter") {
 									event.preventDefault()
-									setMessagesList([
-										...messagesList,
-										handleNewMessage(event.target.value)
-									])
+
+									await client
+										.from("messages")
+										.insert([generateNewMessage(event.target.value)])
+
+									const allMessagesRequest = await client
+										.from("messages")
+										.select("*")
+
+									setMessagesList(allMessagesRequest.data)
 									setMessage("");
 								}
 							}}
@@ -153,7 +164,7 @@ const MessageList = props => {
 								display: 'inline-block',
 								marginRight: '8px',
 							}}
-							src={`https://github.com/vanessametonini.png`}
+							src={`https://github.com/${message.user}.png`}
 						/>
 						<Text tag="strong">
 							{message.user}
