@@ -14,7 +14,14 @@ export default () => {
 		client
 			.from("messages")
 			.select("*")
-			.then(({ data }) => setMessagesList(data))
+			.then(({ data }) => {
+				setMessagesList(data)
+
+				client
+					.from("messages")
+					.on("INSERT", payload => setMessagesList([...messagesList, payload.new]))
+					.subscribe()
+			})
 			.catch(console.error)
 	}, [])
 
