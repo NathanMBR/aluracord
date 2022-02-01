@@ -23,7 +23,7 @@ export default () => {
 
 				client
 					.from("messages")
-					.on("INSERT", payload => setMessagesList([...messagesList, payload.new]))
+					.on("INSERT", payload => setMessagesList(actualMessagesList => [...actualMessagesList, payload.new]))
 					.subscribe()
 			})
 			.catch(console.error)
