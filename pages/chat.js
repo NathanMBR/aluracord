@@ -2,12 +2,16 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../configs.json';
 import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
 
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const client = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 export default () => {
+	const router = useRouter();
+	const user = router.query.user || "NathanMBR"
+
 	const [message, setMessage] = React.useState("")
 	const [messagesList, setMessagesList] = React.useState([])
 	React.useEffect(() => {
@@ -26,7 +30,7 @@ export default () => {
 	}, [])
 
 	const generateNewMessage = newMessageText => ({
-		user: "WIP",
+		user,
 		text: newMessageText
 	})
 
